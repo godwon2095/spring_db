@@ -5,12 +5,14 @@ public class Student {
   private String s_pwd;
   private String s_college;
   private String s_major;
+	private int s_point;
 
 	public Student() {
 		s_addr = null;
 		s_pwd = null;
 		s_college = null;
 		s_major = null;
+		s_point = 0;
 	}
 
 	public void setSAddr(String s_addr) {
@@ -29,6 +31,10 @@ public class Student {
 		this.s_major = s_major;
 	}
 
+	public void setSPoint(int s_point) {
+		this.s_point = s_point;
+	}
+
 	public String getSAddr() {
 		return s_addr;
 	}
@@ -43,5 +49,9 @@ public class Student {
 
 	public String getSMajor() {
 		return s_major;
+	}
+
+	public int getSPoint() {
+		return s_point;
 	}
 }

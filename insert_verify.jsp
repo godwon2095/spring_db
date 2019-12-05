@@ -10,6 +10,7 @@
 		String s_id = (String) session.getAttribute("user");
 		String c_id = request.getParameter("c_id");
 		int c_id_no = Integer.parseInt(request.getParameter("c_id_no"));
+		int point = Integer.parseInt(request.getParameter("point"));
 
 		Connection myConn = null;
 		String result = null;
@@ -25,11 +26,12 @@
 			System.err.println("SQLException: " + ex.getMessage());
 		}
 
-		CallableStatement cstmt = myConn.prepareCall("{call InsertEnroll(?, ?, ?, ?)}");
+		CallableStatement cstmt = myConn.prepareCall("{call InsertEnroll(?, ?, ?, ?, ?)}");
 		cstmt.setString(1, s_id);
 		cstmt.setString(2, c_id);
 		cstmt.setInt(3, c_id_no);
-		cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
+		cstmt.setInt(4, point);
+		cstmt.registerOutParameter(5, java.sql.Types.VARCHAR);
 		System.out.println(s_id+ "," + c_id+ "," + c_id_no+ "," + java.sql.Types.VARCHAR);
 		try {
 			cstmt.execute();

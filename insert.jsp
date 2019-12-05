@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="java.sql.*"  %>
+<%@ page import="java.util.*, studentBean.*"%>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -31,7 +32,10 @@
        mySQL = "SELECT c_id, c_id_no, c_name, c_unit FROM course WHERE c_id not in (SELECT c_id FROM enroll WHERE s_id='" + session_id + "')";
        myResultSet = stmt.executeQuery(mySQL);
      %>
+     <jsp:useBean id="studentInfo" class="studentBean.StudentInfo" />
+     <% int point = studentInfo.getStudentsPoint(session_id); %>
     <div class="container">
+      <h4>사용 가능 포인트 : <%= point %></h4>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -68,8 +72,34 @@
                 <td><%= c_id_no %></td>
                 <td><a href="#" id="c_name_<%= c_id %>"><%= c_name %></a></td>
                 <td><%= c_unit %></td>
-                <td><a href="insert_verify.jsp?c_id=<%= c_id %>&c_id_no=<%= c_id_no %>">수강신청</a></td>
+                <td><a href="#" data-toggle="modal" data-target="#modal-<%= c_id %>">수강신청</a></td>
               </tr>
+              <div class="modal fade" id="modal-<%= c_id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalCenterTitle">(<%= c_id %>)<%= c_name %></h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <form method="post" action="insert_verify.jsp">
+                       <div class="modal-body">
+                        <div class="form-group">
+                          <input type="hidden" name="c_id" value="<%= c_id %>">
+                          <input type="hidden" name="c_id_no" value="<%= c_id_no %>">
+                          <label for="message-text" class="col-form-label">배팅할 포인트</label>
+                          <input type="number" min="0" max="<%= point %>" name="p_amount" class="form-control" id="message-text" required></input>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <input type="submit" class="btn btn-primary" value="수강신청">
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
               <script>
                 $('#c_name_<%= c_id %>').click(function(){
                   var remained = parseInt('<%= t_max %>') - parseInt('<%= enrolls_count %>');

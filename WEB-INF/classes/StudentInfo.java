@@ -55,4 +55,31 @@ public class StudentInfo {
   	}
 		return vecList;
 	}
+
+		public int getStudentsPoint(String s_id) {
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String mySQL = "";
+			int point = 0;
+
+	  	try {
+	  	  conn = pool.getConnection();
+				mySQL = "select s_point from student where s_id=?";
+				pstmt = conn.prepareStatement(mySQL);
+				pstmt.setString(1, s_id);
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					Student st = new Student();
+					point = rs.getInt("s_point");
+				}
+
+				pstmt.close();
+				conn.close();
+	    } catch(SQLException ex) {
+		    System.err.println("SQLException: " + ex.getMessage());
+	  	}
+			return point;
+		}
 }
