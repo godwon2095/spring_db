@@ -10,7 +10,7 @@
     log="<a href=logout.jsp class='nav-link'>로그아웃</a>";
  %>
  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="main.jsp">Home</a>
+  <a class="navbar-brand" href="main.jsp">수강신청 시스템</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

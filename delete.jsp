@@ -14,38 +14,42 @@
 			if (session_id == null)
 				response.sendRedirect("login.jsp");
 		%>
-
-		<table width="75%" align="center" border>
-			<tr>
-				<th>과목번호</th>
-				<th>분반</th>
-				<th>과목명</th>
-				<th>학점</th>
-				<th>배팅한 포인트</th>
-				<th>수강신청</th>
-			</tr>
-			<br>
-			<jsp:useBean id="enrollMgr" class="enrollBean.EnrollMgr" />
-			<%
-				Vector vlist = enrollMgr.getEnrollList(session_id);
-				int counter = vlist.size();
-				for (int i = 0; i < vlist.size(); i++) {
-					Enroll en = (Enroll) vlist.elementAt(i);
-			%>
-			<tr>
-				<td align="center"><%=en.getCId()%></td>
-				<td align="center"><%=en.getCIdNo()%></td>
-				<td align="center"><%=en.getCName()%></td>
-				<td align="center"><%=en.getCUnit()%></td>
-				<td align="center"><%=en.getPAmount()%></td>
-				<td align="center"><a
-					href="delete_verify.jsp?c_id=
-					<%=en.getCId()%>&c_id_no=<%=en.getCIdNo()%>">삭제</a></td>
-				<%
-					}
-				%>
-			</tr>
-		</table>
+		<div class="container">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">과목번호</th>
+						<th scope="col">분반</th>
+						<th scope="col">과목명</th>
+						<th scope="col">학점</th>
+						<th scope="col">배팅한 포인트</th>
+						<th scope="col">수강신청</th>
+					</tr>
+				</thead>
+				<tbody>
+				<jsp:useBean id="enrollMgr" class="enrollBean.EnrollMgr" />
+					<%
+						Vector vlist = enrollMgr.getEnrollList(session_id);
+						int counter = vlist.size();
+						for (int i = 0; i < vlist.size(); i++) {
+							Enroll en = (Enroll) vlist.elementAt(i);
+					%>
+					<tr>
+						<td><%=en.getCId()%></td>
+						<td><%=en.getCIdNo()%></td>
+						<td><%=en.getCName()%></td>
+						<td><%=en.getCUnit()%></td>
+						<td><%=en.getPAmount()%></td>
+						<td><a
+							href="delete_verify.jsp?c_id=
+							<%=en.getCId()%>&c_id_no=<%=en.getCIdNo()%>">삭제</a></td>
+						<%
+							}
+						%>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<%@ include file="js.html" %>
 	</body>
 </html>
