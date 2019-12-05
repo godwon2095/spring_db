@@ -5,12 +5,14 @@ public class Enroll {
 	private int c_id_no;
 	private String c_name;
 	private int c_unit;
+	private int p_amount;
 
 	public Enroll() {
 		c_id = null;
 		c_id_no = 0;
 		c_name = null;
 		c_unit = 0;
+		p_amount = 0;
 	}
 
 	public void setCId(String c_id) {
@@ -29,6 +31,10 @@ public class Enroll {
 		this.c_unit = c_unit;
 	}
 
+	public void setPAmount(int p_amount) {
+		this.p_amount = p_amount;
+	}
+
 	public String getCId() {
 		return c_id;
 	}
@@ -43,5 +49,9 @@ public class Enroll {
 
 	public int getCUnit() {
 		return c_unit;
+	}
+
+	public int getPAmount() {
+		return p_amount;
 	}
 }
