@@ -107,7 +107,7 @@ create or replace procedure InsertEnroll(sStudentId in varchar2,
       values (sStudentId, sCourseId, nCourseIdNo, sPoint, 'usage');
 
       commit;
-       result := '수강신청 등록이 완료되었습니다.';
+       result := '수강신청 배팅이 완료되었습니다.';
   exception
       when too_many_sumCourseUnit then
           result := '최대학점을 초과하였습니다.';

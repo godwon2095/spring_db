@@ -21,6 +21,7 @@
 				<th>분반</th>
 				<th>과목명</th>
 				<th>학점</th>
+				<th>배팅한 포인트</th>
 				<th>수강신청</th>
 			</tr>
 			<br>
@@ -36,6 +37,7 @@
 				<td align="center"><%=en.getCIdNo()%></td>
 				<td align="center"><%=en.getCName()%></td>
 				<td align="center"><%=en.getCUnit()%></td>
+				<td align="center"><%=en.getPAmount()%></td>
 				<td align="center"><a
 					href="delete_verify.jsp?c_id=
 					<%=en.getCId()%>&c_id_no=<%=en.getCIdNo()%>">삭제</a></td>

@@ -10,7 +10,7 @@
 		String s_id = (String) session.getAttribute("user");
 		String c_id = request.getParameter("c_id");
 		int c_id_no = Integer.parseInt(request.getParameter("c_id_no"));
-		int point = Integer.parseInt(request.getParameter("point"));
+		int point = Integer.parseInt(request.getParameter("p_amount"));
 
 		Connection myConn = null;
 		String result = null;
@@ -35,7 +35,7 @@
 		System.out.println(s_id+ "," + c_id+ "," + c_id_no+ "," + java.sql.Types.VARCHAR);
 		try {
 			cstmt.execute();
-			result = cstmt.getString(4);
+			result = cstmt.getString(5);
 			System.out.println(result);
 	%>
 	<script>
