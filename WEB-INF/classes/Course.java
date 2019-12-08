@@ -5,12 +5,16 @@ public class Course {
   private String c_id_no;
   private String c_name;
   private String c_unit;
+	private int t_max;
+	private int enrolls_count;
 
 	public Course() {
 		c_id = null;
 		c_id_no = null;
 		c_name = null;
 		c_unit = null;
+		t_max = 0;
+		enrolls_count = 0;
 	}
 
 	public void setCId(String c_id) {
@@ -29,6 +33,14 @@ public class Course {
 		this.c_unit = c_unit;
 	}
 
+	public void setTMax(int t_max) {
+		this.t_max = t_max;
+	}
+
+	public void setEnrollsCount(int enrolls_count) {
+		this.enrolls_count = enrolls_count;
+	}
+
 	public String getCId() {
 		return c_id;
 	}
@@ -43,5 +55,13 @@ public class Course {
 
 	public String getCUnit() {
 		return c_unit;
+	}
+
+	public int getTMax() {
+		return t_max;
+	}
+
+	public int getEnrollsCount() {
+		return enrolls_count;
 	}
 }

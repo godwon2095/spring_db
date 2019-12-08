@@ -31,6 +31,7 @@ public class CourseMgr {
 		ResultSet rs = null;
 		String mySQL = "";
 		Vector vecList = new Vector();
+		CallableStatement cstmt = null;
 
   	try {
   	  conn = pool.getConnection();
@@ -40,15 +41,24 @@ public class CourseMgr {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
+				cstmt = conn.prepareCall("{call getCourseInfo(?, ?, ?)}");
+				cstmt.setString(1, rs.getString("c_id"));
+				cstmt.registerOutParameter(2, java.sql.Types.VARCHAR);
+				cstmt.registerOutParameter(3, java.sql.Types.VARCHAR);
+				cstmt.execute();
+
 				Course course = new Course();
 				course.setCId(rs.getString("c_id"));
 				course.setCIdNo(rs.getString("c_id_no"));
 				course.setCName(rs.getString("c_name"));
 				course.setCUnit(rs.getString("c_unit"));
+				course.setTMax(cstmt.getInt(2));
+				course.setEnrollsCount(cstmt.getInt(3));
 				vecList.add(course);
 			}
 
 			pstmt.close();
+			cstmt.close();
 			conn.close();
     } catch(SQLException ex) {
 	    System.err.println("SQLException: " + ex.getMessage());
