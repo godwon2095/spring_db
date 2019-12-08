@@ -1,29 +1,30 @@
-CREATE OR REPLACE PROCEDURE getCourseInfo(v_c_id IN VARCHAR2, t_max_num OUT VARCHAR2, enrolls_count OUT VARCHAR2)
+CREATE OR REPLACE PROCEDURE getCourseInfo
+(v_c_id IN VARCHAR2, v_c_id_no NUMBER, t_max_num OUT NUMBER, enrolls_count OUT NUMBER)
 IS
-    CURSOR cur1 (course_id VARCHAR2)
+    CURSOR get_t_maxes
     IS
     select t_max
     from teach
-    where c_id = course_id;
+    where c_id = v_c_id and c_id_no = v_c_id_no;
+
+    nYear number;
+    nSemester number;
 BEGIN
-    FOR cur_rec IN cur1(v_c_id)
+    FOR t_max_list IN get_t_maxes
     LOOP
         BEGIN
-        t_max_num := TO_CHAR(cur_rec.t_max);
-        EXCEPTION
-            WHEN OTHERS THEN
-                t_max_num := SQLERRM;
+          t_max_num := t_max_list.t_max;
         END;
     END LOOP;
+
+    nYear := Date2EnrollYear(SYSDATE);
+    nSemester := Date2EnrollSemester(SYSDATE);
 
     select Count(*)
     into enrolls_count
     from enroll
-    where c_id = v_c_id and e_year=2020 and e_semester=1;
-
-    EXCEPTION
-        WHEN no_data_found THEN
-            t_max_num := SQLERRM;
-        WHEN OTHERS THEN
-            t_max_num := SQLERRM;
+    where c_id = v_c_id
+      and c_id_no = v_c_id_no
+      and e_year=nYear
+      and e_semester=nSemester;
 END;

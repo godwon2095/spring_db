@@ -2,7 +2,7 @@ package courseBean;
 
 public class Course {
 	private String c_id;
-  private String c_id_no;
+  private int c_id_no;
   private String c_name;
   private String c_unit;
 	private int t_max;
@@ -10,7 +10,7 @@ public class Course {
 
 	public Course() {
 		c_id = null;
-		c_id_no = null;
+		c_id_no = 0;
 		c_name = null;
 		c_unit = null;
 		t_max = 0;
@@ -21,7 +21,7 @@ public class Course {
 		this.c_id = c_id;
 	}
 
-	public void setCIdNo(String c_id_no) {
+	public void setCIdNo(int c_id_no) {
 		this.c_id_no = c_id_no;
 	}
 
@@ -45,7 +45,7 @@ public class Course {
 		return c_id;
 	}
 
-	public String getCIdNo() {
+	public int getCIdNo() {
 		return c_id_no;
 	}
 

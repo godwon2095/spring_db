@@ -69,7 +69,7 @@
           </div>
           <script>
             $('#c_name_<%= course.getCId() %>').click(function(){
-              alert('모집인원은 <%= course.getTMax() %>명입니다.');
+              alert('모집인원은 <%= course.getTMax() %>명이고, 현재 신청인원은 <%= course.getEnrollsCount() %>명 입니다.');
             });
           </script>
           <%
