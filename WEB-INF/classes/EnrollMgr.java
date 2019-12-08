@@ -47,7 +47,7 @@ public class EnrollMgr {
 			cstmt2.execute();
 			int nSemester = cstmt2.getInt(1);
 
-			String mySQL = "select e.c_id cid, e.c_id_no cid_no, c.c_name cname, c.c_unit cunit, p.p_amount pamount from enroll e, course c, point_history p where e.s_id=? and e.e_year=? and e.e_semester=? and e.c_id=c.c_id and e.c_id_no=c.c_id_no and p.s_id = e.s_id and p.c_id=e.c_id and p.c_id_no=e.c_id_no";
+			String mySQL = "select c.c_id cid, c.c_id_no cid_no, c.c_name cname, c.c_unit cunit, p.p_amount pamount from course c, enroll e, point_history p where p.e_id = e.e_id and e.c_id = c.c_id and e.c_id_no = c.c_id_no and e.s_id=?and e.e_year=? and e.e_semester=?";
 			pstmt = conn.prepareStatement(mySQL);
 			pstmt.setString(1, s_id);
 			pstmt.setInt(2, nYear);
@@ -68,39 +68,6 @@ public class EnrollMgr {
 			pstmt.close();
 			conn.close();
 
-		} catch (Exception ex) {
-			System.out.println("Exception" + ex);
-		}
-
-		return vecList;
-	}
-
-	public Vector getEnrollList(String s_id, int nYear, int nSemester) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		Vector vecList = new Vector();
-
-		try {
-			conn = pool.getConnection();
-
-			String mySQL = "select e.c_id cid,e.c_id_no cid_no,c.c_name cname,c.c_unit cunit from enroll e, course c where e.s_id=? and e.e_year=? and e.e_semester=? and e.c_id=c.c_id and e.c_id_no=c.c_id_no";
-			pstmt = conn.prepareStatement(mySQL);
-			pstmt.setString(1, s_id);
-			pstmt.setInt(2, nYear);
-			pstmt.setInt(3, nSemester);
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				Enroll en = new Enroll();
-				en.setCId(rs.getString("cid"));
-				en.setCIdNo(rs.getInt("cid_no"));
-				en.setCName(rs.getString("cname"));
-				en.setCUnit(rs.getInt("cunit"));
-				vecList.add(en);
-			}
-			pstmt.close();
-			conn.close();
 		} catch (Exception ex) {
 			System.out.println("Exception" + ex);
 		}
