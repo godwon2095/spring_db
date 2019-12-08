@@ -6,7 +6,6 @@ create or replace procedure InsertEnroll(sStudentId in varchar2,
     is
        too_many_sumCourseUnit exception;
        too_many_courses exception;
-       too_many_students exception;
        too_many_betting_point exception;
        duplicate_time exception;
        nYear number;
@@ -14,8 +13,9 @@ create or replace procedure InsertEnroll(sStudentId in varchar2,
        nSumCourseUnit number;
        nCourseUnit number;
        nCnt number;
-       nTeachMax number;
        nStudentPointRemained number;
+       new_e_id number;
+       new_p_id number;
    cursor n_cnt is
        select count(*)
        into nCnt
@@ -72,21 +72,6 @@ create or replace procedure InsertEnroll(sStudentId in varchar2,
            raise too_many_courses;
       end if;
 
-      select t_max
-      into nTeachMax
-      from teach
-      where t_year=nYear and t_semester=nSemester and c_id=sCourseId
-      and c_id_no = nCourseIdNo;
-
-      select count(*)
-      into nCnt
-      from enroll
-      where e_year=nYear and e_semester=nSemester
-      and c_id=sCourseId and c_id_no = nCourseIdNo;
-      if (nCnt >= nTeachMax) then
-          raise too_many_students;
-      end if;
-
       open n_cnt;
       fetch n_cnt into nCnt;
 
@@ -96,30 +81,31 @@ create or replace procedure InsertEnroll(sStudentId in varchar2,
 
       close n_cnt;
 
-      insert into enroll(s_id, c_id, c_id_no, e_year, e_semester)
-      values (sStudentId, sCourseId, nCourseIdNo, nYear, nSemester);
+      new_e_id := enroll_e_id_seq.NEXTVAL;
+      new_p_id := point_history_p_id_seq.NEXTVAL;
+
+      insert into enroll(e_id, s_id, c_id, c_id_no, e_year, e_semester)
+      values (new_e_id, sStudentId, sCourseId, nCourseIdNo, nYear, nSemester);
 
       update student
-      set s_point = (nStudentPointRemained - sPoint)
+      set s_point = nStudentPointRemained - sPoint
       where s_id = sStudentId;
 
-      insert into point_history(s_id, c_id, c_id_no, p_amount, p_type)
-      values (sStudentId, sCourseId, nCourseIdNo, sPoint, 'usage');
+      insert into point_history(p_id, s_id, e_id, p_amount, p_type)
+      values (new_p_id, sStudentId, new_e_id, sPoint, 'enroll');
 
       commit;
-       result := '수강신청 배팅이 완료되었습니다.';
+      result := '수강신청 배팅이 완료되었습니다.';
   exception
       when too_many_sumCourseUnit then
           result := '최대학점을 초과하였습니다.';
       when too_many_courses then
           result := '이미 등록된 과목을 신청하였습니다.';
-      when too_many_students then
-          result := '수강신청 인원이 초과되어 등록이 불가합니다.';
       when duplicate_time then
           result := '이미 등록된 과목중 중복되는 시간이 존재합니다.';
       when too_many_betting_point then
           result := '갖고있는 포인트보다 많은 포인트를 배팅하셨습니다.';
       when others then
           rollback;
-      result := SQLCODE;
+      result := SQLCODE || SQLERRM;
   end;

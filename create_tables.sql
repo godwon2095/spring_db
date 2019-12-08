@@ -4,6 +4,8 @@ DROP TABLE COURSE CASCADE CONSTRAINTS PURGE;
 DROP TABLE ENROLL CASCADE CONSTRAINTS PURGE;
 DROP TABLE TEACH CASCADE CONSTRAINTS PURGE;
 DROP TABLE POINT_HISTORY CASCADE CONSTRAINTS PURGE;
+DROP SEQUENCE enroll_e_id_seq;
+DROP SEQUENCE point_history_p_id_seq;
 
 
 CREATE TABLE student
@@ -16,7 +18,7 @@ CREATE TABLE student
     s_major   VARCHAR2(50)   not null,
     s_pwd       VARCHAR2(10)   not null,
     s_point   INTEGER default 100 not null,
-    CONSTRAINT s_pk PRIMARY KEY (s_id)
+    CONSTRAINT student_pk PRIMARY KEY (s_id)
 );
 
 INSERT INTO student (s_id, s_name, s_addr, s_year, s_college, s_major, s_pwd) VALUES
@@ -48,7 +50,7 @@ CREATE TABLE course
     c_id_no  NUMBER(1),
     c_name  VARCHAR2(50),
     c_unit     NUMBER(1),
-    CONSTRAINT c_pk PRIMARY KEY (c_id, c_id_no)
+    CONSTRAINT course_pk PRIMARY KEY (c_id, c_id_no)
 );
 
 INSERT INTO course VALUES ('C100', 3, '컴퓨터 프로그래밍', 3) ;
@@ -76,7 +78,7 @@ CREATE TABLE professor
     p_college    VARCHAR2(50)   not null,
     p_major      VARCHAR2(50)   not null,
     p_pwd         VARCHAR2(10)   not null,
-    CONSTRAINT p_pk PRIMARY KEY (p_id)
+    CONSTRAINT professor_pk PRIMARY KEY (p_id)
 );
 
 INSERT INTO professor VALUES ('CS4580', '박구곤', 'IT학부', '컴퓨터공학','4580');
@@ -92,47 +94,55 @@ INSERT INTO professor VALUES ('MM4572', '이상헌', 'IT학부', '멀티미디�
 
 CREATE TABLE enroll
 (
+    e_id       NUMBER,
     s_id	     VARCHAR2(10),
     c_id	     VARCHAR2(10),
     c_id_no    NUMBER(1),
     e_year      NUMBER(4),
     e_semester    NUMBER(1),
     e_score    NUMBER(3),
-    CONSTRAINT e_pk PRIMARY KEY (s_id, c_id, c_id_no),
-    CONSTRAINT e_c_id_fk FOREIGN KEY (c_id, c_id_no) REFERENCES  course (c_id, c_id_no)
+    e_success  CHAR(1) default('0'),
+    CONSTRAINT enroll_pk PRIMARY KEY (e_id),
+    CONSTRAINT enroll_student_fk FOREIGN KEY (s_id) REFERENCES student(s_id),
+    CONSTRAINT enroll_course_fk FOREIGN KEY (c_id, c_id_no) REFERENCES  course (c_id, c_id_no),
+    CONSTRAINT enroll_success_ck CHECK (e_success in ('0', '1'))
 );
 
+CREATE SEQUENCE enroll_e_id_seq
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1;
 
-INSERT INTO enroll VALUES ( '20011234', 'C600', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011234', 'C700', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011235', 'C100', 3, 2019, 2, 76);
-INSERT INTO enroll VALUES ( '20011235', 'C300', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011235', 'C400', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011235', 'C500', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011235', 'C600', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011235', 'C700', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011236', 'C100', 3, 2019, 2, 67);
-INSERT INTO enroll VALUES ( '20011236', 'C300', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011236', 'C500', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011236', 'C600', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011236', 'C700', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011237', 'C100', 3, 2019, 2, 45);
-INSERT INTO enroll VALUES ( '20011237', 'C300', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011237', 'C500', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011237', 'C600', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20011237', 'C700', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20021245', 'C100', 3, 2019, 2, 75);
-INSERT INTO enroll VALUES ( '20021245', 'C200', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20021246', 'C100', 3, 2019, 2, 91);
-INSERT INTO enroll VALUES ( '20021246', 'C200', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20021247', 'C100', 3, 2019, 2, 87);
-INSERT INTO enroll VALUES ( '20021247', 'C200', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20012454', 'C100', 3, 2019, 2, 67);
-INSERT INTO enroll VALUES ( '20012454', 'M100', 3, 2019, 2, 57);
-INSERT INTO enroll VALUES ( '20012454', 'M500', 3, 2019, 2, null);
-INSERT INTO enroll VALUES ( '20012456', 'C100', 3, 2019, 2, 96);
-INSERT INTO enroll VALUES ( '20012456', 'M100', 3, 2019, 2, 63);
-INSERT INTO enroll VALUES ( '20012456', 'M500', 3, 2019, 2, null);
+-- INSERT INTO enroll(e_id, s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES (enroll_e_id_seq.NEXTVAL, '20011234', 'C600', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011234', 'C700', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011235', 'C100', 3, 2019, 2, 76);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011235', 'C300', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011235', 'C400', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011235', 'C500', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011235', 'C600', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011235', 'C700', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011236', 'C100', 3, 2019, 2, 67);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011236', 'C300', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011236', 'C500', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011236', 'C600', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011236', 'C700', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011237', 'C100', 3, 2019, 2, 45);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011237', 'C300', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011237', 'C500', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011237', 'C600', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20011237', 'C700', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20021245', 'C100', 3, 2019, 2, 75);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20021245', 'C200', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20021246', 'C100', 3, 2019, 2, 91);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20021246', 'C200', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20021247', 'C100', 3, 2019, 2, 87);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20021247', 'C200', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20012454', 'C100', 3, 2019, 2, 67);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20012454', 'M100', 3, 2019, 2, 57);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20012454', 'M500', 3, 2019, 2, null);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20012456', 'C100', 3, 2019, 2, 96);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20012456', 'M100', 3, 2019, 2, 63);
+-- INSERT INTO enroll(s_id, c_id, c_id_no, e_year, e_semester, e_score) VALUES ( '20012456', 'M500', 3, 2019, 2, null);
 
 CREATE TABLE teach
 (
@@ -144,8 +154,8 @@ CREATE TABLE teach
     t_time    NUMBER(1),
     t_where  VARCHAR2(50),
     t_max    NUMBER(2),
-    CONSTRAINT t_pk PRIMARY KEY (p_id, c_id, c_id_no,t_year,t_semester ),
-    CONSTRAINT t_c_id_fk FOREIGN KEY (c_id, c_id_no) REFERENCES  course (c_id, c_id_no)
+    CONSTRAINT teach_pk PRIMARY KEY (p_id, c_id, c_id_no, t_year, t_semester),
+    CONSTRAINT teach_course_fk FOREIGN KEY (c_id, c_id_no) REFERENCES  course (c_id, c_id_no)
  );
 
 INSERT INTO teach VALUES ( 'CS4580', 'C100', 3 , 2020, 1, 4, '인-201', 5);
@@ -170,15 +180,21 @@ INSERT INTO teach VALUES ( 'MM4572', 'M700', 3 , 2020, 1, 8, '숭-201', 3);
 
 CREATE TABLE point_history
 (
+    p_id     NUMBER,
     s_id	     VARCHAR2(10) not null,
-    c_id	     VARCHAR2(10) null,
-    c_id_no    NUMBER(1) null,
+    e_id	     NUMBER null,
     p_amount INTEGER not null,
-    p_type VARCHAR2(10),
+    p_type VARCHAR2(20),
     p_created_at DATE default SYSDATE NOT NULL,
-    CONSTRAINT point_pk PRIMARY KEY (s_id, c_id, c_id_no),
-    CONSTRAINT point_enroll_id_fk FOREIGN KEY (s_id, c_id, c_id_no) REFERENCES  enroll (s_id, c_id, c_id_no) ON DELETE SET NULL,
-    CONSTRAINT point_student_id_fk FOREIGN KEY (s_id) REFERENCES  student (s_id)
+    CONSTRAINT point_pk PRIMARY KEY (p_id),
+    CONSTRAINT point_enroll_id_fk FOREIGN KEY (e_id) REFERENCES  enroll (e_id) ON DELETE SET NULL,
+    CONSTRAINT point_student_id_fk FOREIGN KEY (s_id) REFERENCES  student (s_id) ON DELETE CASCADE,
+    CONSTRAINT p_type_ck CHECK (p_type in ('enroll', 'charge', 'deduction', 'delete_enroll'))
 );
+
+CREATE SEQUENCE point_history_p_id_seq
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1;
 
 COMMIT;
