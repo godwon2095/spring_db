@@ -47,7 +47,7 @@ public class EnrollMgr {
 			cstmt2.execute();
 			int nSemester = cstmt2.getInt(1);
 
-			String mySQL = "select c.c_id cid, c.c_id_no cid_no, c.c_name cname, c.c_unit cunit, p.p_amount pamount from course c, enroll e, point_history p where p.e_id = e.e_id and e.c_id = c.c_id and e.c_id_no = c.c_id_no and e.s_id=?and e.e_year=? and e.e_semester=?";
+			String mySQL = "select c.c_id cid, c.c_id_no cid_no, c.c_name cname, c.c_unit cunit, p.p_amount pamount from course c, enroll e, point_history p where p.e_id = e.e_id and e.c_id = c.c_id and e.c_id_no = c.c_id_no and e.s_id=?and e.e_year=? and e.e_semester=? and p.e_id is not null";
 			pstmt = conn.prepareStatement(mySQL);
 			pstmt.setString(1, s_id);
 			pstmt.setInt(2, nYear);
