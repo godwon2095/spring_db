@@ -65,12 +65,13 @@
 				</tr>
 			</table>
 			<hr>
+			<h3>수강신청 내역 조회하기</h3>
 			<form method="post" action="select_verify.jsp" >
 				<div class="form-group">
 					<label for="year">년도</label>
-					<input type="text" name="year" value=<%= year %> class="form-control" size=4>
+					<input type="number" name="year" value=<%= year %> class="form-control" size=4>
 					<label for="semester">학기</label>
-					<input type="text" name="semester" value=<%= semester %> class="form-control" size=1>
+					<input type="number" name="semester" value=<%= semester %> min="1" max="2" class="form-control" size=1>
 				</div>
 				<input TYPE="submit" NAME="Submit" VALUE="조회" class="btn btn-primary">
 			</form>

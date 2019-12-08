@@ -153,17 +153,51 @@ public class EnrollMgr {
 
 	public void deleteEnroll(String s_id, String c_id, int c_id_no) {
 		Connection conn = null;
-		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		PreparedStatement pstmt3 = null;
+		PreparedStatement pstmt4 = null;
+		int p_amount = 0;
 		try {
 			conn = pool.getConnection();
-			String mySQL = "delete from enroll where s_id=? and c_id=? and c_id_no=?";
-			pstmt = conn.prepareStatement(mySQL);
-			pstmt.setString(1, s_id);
-			pstmt.setString(2, c_id);
-			pstmt.setInt(3, c_id_no);
-			pstmt.executeUpdate();
 
-			pstmt.close();
+			String mySQL2 = "select p_amount from point_history where s_id=? and c_id=? and c_id_no=? and p_type='usage'";
+			pstmt2 = conn.prepareStatement(mySQL2);
+			pstmt2.setString(1, s_id);
+			pstmt2.setString(2, c_id);
+			pstmt2.setInt(3, c_id_no);
+			rs = pstmt2.executeQuery();
+
+			while (rs.next()) {
+				p_amount = rs.getInt("p_amount");
+			}
+			pstmt2.close();
+
+			String mySQL3 = "update student set s_point=s_point+? where s_id=?";
+			pstmt3 = conn.prepareStatement(mySQL3);
+			pstmt3.setInt(1, p_amount);
+			pstmt3.setString(2, s_id);
+			pstmt3.executeUpdate();
+			pstmt3.close();
+
+			String mySQL4 = "insert into point_history(s_id, c_id, c_id_no, p_amount, p_type) values (?, ?, ?, ?, 'cancel')";
+			pstmt4 = conn.prepareStatement(mySQL4);
+			pstmt4.setString(1, s_id);
+			pstmt4.setString(2, c_id);
+			pstmt4.setInt(3, c_id_no);
+			pstmt4.setInt(4, p_amount);
+			pstmt4.executeUpdate();
+
+			String mySQL1 = "delete from enroll where s_id=? and c_id=? and c_id_no=?";
+			pstmt1 = conn.prepareStatement(mySQL1);
+			pstmt1.setString(1, s_id);
+			pstmt1.setString(2, c_id);
+			pstmt1.setInt(3, c_id_no);
+			pstmt1.executeUpdate();
+			pstmt1.close();
+
+			pstmt4.close();
 			conn.close();
 		} catch (Exception ex) {
 			System.out.println("Exception" + ex);
