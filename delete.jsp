@@ -41,8 +41,8 @@
 						<td><%=en.getCUnit()%></td>
 						<td><%=en.getPAmount()%></td>
 						<td><a
-							href="delete_verify.jsp?c_id=
-							<%=en.getCId()%>&c_id_no=<%=en.getCIdNo()%>">삭제</a></td>
+							href="delete_verify.jsp?e_id=
+							<%=en.getEId()%>">삭제</a></td>
 						<%
 							}
 						%>

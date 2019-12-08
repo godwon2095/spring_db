@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<%@ page import="enrollBean.*"%>
+<%@ page import="java.util.*, enrollBean.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,16 +9,18 @@
 </head>
 <body>
 	<%
+		int e_id = Integer.parseInt(request.getParameter("e_id"));
 		String s_id = (String) session.getAttribute("user");
-		String c_id = request.getParameter("c_id");
-		int c_id_no = Integer.parseInt(request.getParameter("c_id_no"));
+		String result = null;
+		System.out.println(e_id);
+		System.out.println(s_id);
 	%>
-	<jsp:useBean id="enrollMgr" class="enrollBean.EnrollMgr" scope="page" />
+	<jsp:useBean id="enrollMgr" class="enrollBean.EnrollMgr" />
 	<%
-		enrollMgr.deleteEnroll(s_id, c_id, c_id_no);
+		result = enrollMgr.deleteEnroll(e_id, s_id);
 	%>
 	<script>
-		alert("삭제되었습니다.");
+		alert("<%= result %>");
 		location.href = "delete.jsp";
 	</script>
 </body>

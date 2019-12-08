@@ -47,7 +47,7 @@ public class EnrollMgr {
 			cstmt2.execute();
 			int nSemester = cstmt2.getInt(1);
 
-			String mySQL = "select c.c_id cid, c.c_id_no cid_no, c.c_name cname, c.c_unit cunit, p.p_amount pamount from course c, enroll e, point_history p where p.e_id = e.e_id and e.c_id = c.c_id and e.c_id_no = c.c_id_no and e.s_id=?and e.e_year=? and e.e_semester=? and p.e_id is not null";
+			String mySQL = "select e.e_id eid, c.c_id cid, c.c_id_no cid_no, c.c_name cname, c.c_unit cunit, p.p_amount pamount from course c, enroll e, point_history p where p.e_id = e.e_id and e.c_id = c.c_id and e.c_id_no = c.c_id_no and e.s_id=?and e.e_year=? and e.e_semester=? and p.e_id is not null";
 			pstmt = conn.prepareStatement(mySQL);
 			pstmt.setString(1, s_id);
 			pstmt.setInt(2, nYear);
@@ -56,6 +56,7 @@ public class EnrollMgr {
 
 			while (rs.next()) {
 				Enroll en = new Enroll();
+				en.setEId(rs.getInt("eid"));
 				en.setCId(rs.getString("cid"));
 				en.setCIdNo(rs.getInt("cid_no"));
 				en.setCName(rs.getString("cname"));
@@ -118,56 +119,30 @@ public class EnrollMgr {
 		return nSemester;
 	}
 
-	public void deleteEnroll(String s_id, String c_id, int c_id_no) {
+	public String deleteEnroll(int e_id, String s_id) {
 		Connection conn = null;
-		ResultSet rs = null;
-		PreparedStatement pstmt1 = null;
-		PreparedStatement pstmt2 = null;
-		PreparedStatement pstmt3 = null;
-		PreparedStatement pstmt4 = null;
-		int p_amount = 0;
+		String result = null;
+		String err_msg = null;
+		CallableStatement cstmt = null;
+
 		try {
 			conn = pool.getConnection();
+			
+			cstmt = conn.prepareCall("{call DeleteEnroll(?, ?, ?)}");
+			cstmt.setInt(1, e_id);
+			cstmt.setString(2, s_id);
+			cstmt.registerOutParameter(3, java.sql.Types.VARCHAR);
+			cstmt.execute();
+			result = cstmt.getString(3);
+			System.out.println(result);
 
-			String mySQL2 = "select p_amount from point_history where s_id=? and c_id=? and c_id_no=? and p_type='usage'";
-			pstmt2 = conn.prepareStatement(mySQL2);
-			pstmt2.setString(1, s_id);
-			pstmt2.setString(2, c_id);
-			pstmt2.setInt(3, c_id_no);
-			rs = pstmt2.executeQuery();
-
-			while (rs.next()) {
-				p_amount = rs.getInt("p_amount");
-			}
-			pstmt2.close();
-
-			String mySQL3 = "update student set s_point=s_point+? where s_id=?";
-			pstmt3 = conn.prepareStatement(mySQL3);
-			pstmt3.setInt(1, p_amount);
-			pstmt3.setString(2, s_id);
-			pstmt3.executeUpdate();
-			pstmt3.close();
-
-			String mySQL4 = "insert into point_history(s_id, c_id, c_id_no, p_amount, p_type) values (?, ?, ?, ?, 'cancel')";
-			pstmt4 = conn.prepareStatement(mySQL4);
-			pstmt4.setString(1, s_id);
-			pstmt4.setString(2, c_id);
-			pstmt4.setInt(3, c_id_no);
-			pstmt4.setInt(4, p_amount);
-			pstmt4.executeUpdate();
-
-			String mySQL1 = "delete from enroll where s_id=? and c_id=? and c_id_no=?";
-			pstmt1 = conn.prepareStatement(mySQL1);
-			pstmt1.setString(1, s_id);
-			pstmt1.setString(2, c_id);
-			pstmt1.setInt(3, c_id_no);
-			pstmt1.executeUpdate();
-			pstmt1.close();
-
-			pstmt4.close();
+			cstmt.close();
 			conn.close();
 		} catch (Exception ex) {
-			System.out.println("Exception" + ex);
+			err_msg = "Exception" + ex;
+			result = err_msg;
+			System.out.println(err_msg);
 		}
+		return result;
 	}
 }

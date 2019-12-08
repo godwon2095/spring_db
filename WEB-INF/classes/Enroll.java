@@ -1,6 +1,7 @@
 package enrollBean;
 
 public class Enroll {
+	private int e_id;
 	private String c_id;
 	private int c_id_no;
 	private String c_name;
@@ -8,11 +9,16 @@ public class Enroll {
 	private int p_amount;
 
 	public Enroll() {
+		e_id = 0;
 		c_id = null;
 		c_id_no = 0;
 		c_name = null;
 		c_unit = 0;
 		p_amount = 0;
+	}
+
+	public void setEId(int e_id) {
+		this.e_id = e_id;
 	}
 
 	public void setCId(String c_id) {
@@ -33,6 +39,10 @@ public class Enroll {
 
 	public void setPAmount(int p_amount) {
 		this.p_amount = p_amount;
+	}
+
+	public int getEId() {
+		return e_id;
 	}
 
 	public String getCId() {

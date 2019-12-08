@@ -23,9 +23,6 @@ create or replace procedure DeleteEnroll(enrollId in number,
       from point_history
       where e_id = enrollId;
 
-      delete from enroll
-      where e_id = enrollId;
-
       newPId := point_history_p_id_seq.NEXTVAL;
 
       insert into point_history(p_id, s_id, e_id, p_amount, p_type)
@@ -35,8 +32,11 @@ create or replace procedure DeleteEnroll(enrollId in number,
       set s_point = s_point + enrolledPoint
       where s_id = studentId;
 
+      delete from enroll
+      where e_id = enrollId;
+
       commit;
-      result := '수강신청 배팅이 완료되었습니다.';
+      result := '수강신청이 성공적으로 삭제되었습니다.';
     exception
       when alreadySucceedEnroll then
           result := '이미 등록성공한 수강신청입니다.';
