@@ -7,6 +7,7 @@ public class Enroll {
 	private String c_name;
 	private int c_unit;
 	private int p_amount;
+	private Boolean e_success;
 
 	public Enroll() {
 		e_id = 0;
@@ -15,6 +16,7 @@ public class Enroll {
 		c_name = null;
 		c_unit = 0;
 		p_amount = 0;
+		e_success = null;
 	}
 
 	public void setEId(int e_id) {
@@ -41,6 +43,10 @@ public class Enroll {
 		this.p_amount = p_amount;
 	}
 
+	public void setESuccess(Boolean e_success) {
+		this.e_success = e_success;
+	}
+
 	public int getEId() {
 		return e_id;
 	}
@@ -63,5 +69,9 @@ public class Enroll {
 
 	public int getPAmount() {
 		return p_amount;
+	}
+
+	public Boolean getESuccess() {
+		return e_success;
 	}
 }
