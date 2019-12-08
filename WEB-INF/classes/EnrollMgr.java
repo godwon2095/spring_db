@@ -120,6 +120,35 @@ public class EnrollMgr {
 		return nSemester;
 	}
 
+	public String insertEnroll(String s_id, String c_id, int c_id_no, int point) {
+		Connection conn = null;
+		String result = null;
+		String err_msg = null;
+		CallableStatement cstmt = null;
+
+		try {
+			conn = pool.getConnection();
+
+			cstmt = conn.prepareCall("{call InsertEnroll(?, ?, ?, ?, ?)}");
+			cstmt.setString(1, s_id);
+			cstmt.setString(2, c_id);
+			cstmt.setInt(3, c_id_no);
+			cstmt.setInt(4, point);
+			cstmt.registerOutParameter(5, java.sql.Types.VARCHAR);
+			System.out.println(s_id+ "," + c_id+ "," + c_id_no+ "," + java.sql.Types.VARCHAR);
+			cstmt.execute();
+			result = cstmt.getString(5);
+
+			cstmt.close();
+			conn.close();
+		} catch (Exception ex) {
+			err_msg = "Exception" + ex;
+			result = err_msg;
+			System.out.println(err_msg);
+		}
+		return result;
+	}
+
 	public String deleteEnroll(int e_id, String s_id) {
 		Connection conn = null;
 		String result = null;

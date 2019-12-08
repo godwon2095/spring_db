@@ -56,7 +56,7 @@
                       <input type="hidden" name="c_id" value="<%= course.getCId() %>">
                       <input type="hidden" name="c_id_no" value="<%= course.getCIdNo() %>">
                       <label for="message-text" class="col-form-label">배팅할 포인트</label>
-                      <input type="number" min="0" max="<%= point %>" name="p_amount" class="form-control" id="message-text" required></input>
+                      <input type="number" min="0" max="<%= point %>" name="p_amount" class="form-control" id="message-text" autofocus required></input>
                     </div>
                   </div>
                   <div class="modal-footer">
