@@ -26,6 +26,9 @@
         <a class="nav-link" href="select.jsp">수강신청 조회</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="point_history.jsp">포인트 사용내역 조회</a>
+      </li>
+      <li class="nav-item">
         <%= log %>
       </li>
       <li class="nav-item">

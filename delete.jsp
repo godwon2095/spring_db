@@ -42,7 +42,7 @@
 						<td><%=en.getPAmount()%></td>
 						<td><a
 							href="delete_verify.jsp?e_id=
-							<%=en.getEId()%>">삭제</a></td>
+							<%=en.getEId()%>" data-confirm="정말 삭제하시겠습니까?">삭제</a></td>
 						<%
 							}
 						%>

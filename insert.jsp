@@ -65,7 +65,6 @@
               try {
                 cstmt.execute();
                 t_max = cstmt.getString(2);
-                enrolls_count = cstmt.getString(3);
               %>
               <tr>
                 <th scope="row"><%= c_id %></th>
@@ -102,8 +101,7 @@
               </div>
               <script>
                 $('#c_name_<%= c_id %>').click(function(){
-                  var remained = parseInt('<%= t_max %>') - parseInt('<%= enrolls_count %>');
-                  alert('모집인원은 <%= t_max %>명이며, 현재 수강신청을 할 수 있는 인원은 ' + remained + '명입니다.');
+                  alert('모집인원은 <%= t_max %>명입니다.');
                 });
               </script>
               <%

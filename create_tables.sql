@@ -4,8 +4,10 @@ DROP TABLE COURSE CASCADE CONSTRAINTS PURGE;
 DROP TABLE ENROLL CASCADE CONSTRAINTS PURGE;
 DROP TABLE TEACH CASCADE CONSTRAINTS PURGE;
 DROP TABLE POINT_HISTORY CASCADE CONSTRAINTS PURGE;
+DROP TABLE ADMIN_USER;
 DROP SEQUENCE enroll_e_id_seq;
 DROP SEQUENCE point_history_p_id_seq;
+DROP SEQUENCE admin_user_a_id_seq;
 
 
 CREATE TABLE student
@@ -17,7 +19,7 @@ CREATE TABLE student
     s_college    VARCHAR2(50)   not null,
     s_major   VARCHAR2(50)   not null,
     s_pwd       VARCHAR2(10)   not null,
-    s_point   INTEGER default 100 not null,
+    s_point   INTEGER default 300 not null,
     CONSTRAINT student_pk PRIMARY KEY (s_id)
 );
 
@@ -185,7 +187,7 @@ CREATE TABLE point_history
     e_id	     NUMBER null,
     p_amount INTEGER not null,
     p_type VARCHAR2(20),
-    p_created_at DATE default SYSDATE NOT NULL,
+    p_created_at TIMESTAMP default SYSTIMESTAMP NOT NULL,
     CONSTRAINT point_pk PRIMARY KEY (p_id),
     CONSTRAINT point_enroll_id_fk FOREIGN KEY (e_id) REFERENCES  enroll (e_id) ON DELETE SET NULL,
     CONSTRAINT point_student_id_fk FOREIGN KEY (s_id) REFERENCES  student (s_id) ON DELETE CASCADE,
@@ -196,5 +198,20 @@ CREATE SEQUENCE point_history_p_id_seq
 START WITH 1
 INCREMENT BY 1
 MINVALUE 1;
+
+CREATE TABLE admin_user
+(
+  a_id    NUMBER,
+  a_email VARCHAR2(30) not null,
+  a_pwd   VARCHAR2(10) not null,
+  CONSTRAINT admin_user_pk PRIMARY KEY (a_id)
+);
+
+CREATE SEQUENCE admin_user_a_id_seq
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1;
+
+INSERT INTO admin_user VALUES (admin_user_a_id_seq.nextval, 'dgu@admin.com', '111111');
 
 COMMIT;

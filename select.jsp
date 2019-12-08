@@ -17,6 +17,8 @@
 						<th>분반</th>
 						<th>과목명</th>
 						<th>학점</th>
+						<th>배팅포인트</th>
+						<th>성공여부</th>
 					</tr>
 				</thead>
 				<jsp:useBean id="enrollMgr" class="enrollBean.EnrollMgr" />
@@ -33,20 +35,30 @@
 						semester = Integer.parseInt(request.getParameter("semester"));
 					}
 
-					vlist = enrollMgr.getEnrollList(session_id, year, semester);
+					vlist = enrollMgr.getEnrollList(session_id);
 					int counter = vlist.size();
 					int totUnit = 0;
+					int successUnit = 0;
 
 					for(int i=0; i<vlist.size(); i++) {
 						Enroll en = (Enroll)vlist.elementAt(i);
+						Boolean success = en.getESuccess();
 						totUnit += en.getCUnit();
-				%>
-
-					<tr>
-					<td align="center"><%=en.getCId()%></td>
-					<td align="center"><%=en.getCIdNo()%></td>
-					<td align="center"><%=en.getCName()%></td>
-					<td align="center"><%=en.getCUnit()%></td>
+						if (success) {
+							successUnit += en.getCUnit();
+						}
+						%>
+						<tr>
+						<td><%=en.getCId()%></td>
+						<td><%=en.getCIdNo()%></td>
+						<td><%=en.getCName()%></td>
+						<td><%=en.getCUnit()%></td>
+						<td><%= en.getPAmount() %></td>
+						<% if (success) { %>
+							<td>성공</td>
+						<% } else { %>
+							<td>미확정</td>
+						<% } %>
 
 					<%	}  %>
 
@@ -63,15 +75,19 @@
 					<th>총신청학점</th>
 					<td align="center"><%= totUnit %></td>
 				</tr>
+				<tr>
+					<th>총확정학점</th>
+					<td align="center"><%= successUnit %></td>
+				</tr>
 			</table>
 			<hr>
 			<h3>수강신청 내역 조회하기</h3>
 			<form method="post" action="select_verify.jsp" >
 				<div class="form-group">
 					<label for="year">년도</label>
-					<input type="number" name="year" value=<%= year %> class="form-control" size=4>
+					<input type="number" name="year" value=<%= year %> class="form-control">
 					<label for="semester">학기</label>
-					<input type="number" name="semester" value=<%= semester %> min="1" max="2" class="form-control" size=1>
+					<input type="number" name="semester" value=<%= semester %> min="1" max="2" class="form-control">
 				</div>
 				<input TYPE="submit" NAME="Submit" VALUE="조회" class="btn btn-primary">
 			</form>
