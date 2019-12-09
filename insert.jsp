@@ -6,7 +6,7 @@
 <html lang="ko">
   <head>
     <%@ include file="meta_css.html" %>
-    <title>수강신청 입력</title>
+    <title>수강신청 배팅</title>
   </head>
   <body>
     <%@ include file="top.jsp" %>
@@ -69,7 +69,7 @@
           </div>
           <script>
             $('#c_name_<%= course.getCId() %>').click(function(){
-              alert('모집인원은 <%= course.getTMax() %>명이고, 현재 신청인원은 <%= course.getEnrollsCount() %>명 입니다.');
+              alert('모집인원은 <%= course.getTMax() %>명이고, 현재 배팅인원은 <%= course.getEnrollsCount() %>명 입니다.');
             });
           </script>
           <%

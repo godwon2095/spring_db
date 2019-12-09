@@ -28,10 +28,6 @@ create or replace procedure DeleteEnroll(enrollId in number,
       insert into point_history(p_id, s_id, e_id, p_amount, p_type)
       values (newPId, studentId, enrollId, enrolledPoint, 'delete_enroll');
 
-      update student
-      set s_point = s_point + enrolledPoint
-      where s_id = studentId;
-
       delete from enroll
       where e_id = enrollId;
 

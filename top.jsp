@@ -17,7 +17,7 @@
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="insert.jsp">수강신청 입력</a>
+        <a class="nav-link" href="insert.jsp">수강신청 배팅</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="delete.jsp">수강신청 삭제</a>

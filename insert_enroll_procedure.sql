@@ -87,10 +87,6 @@ create or replace procedure InsertEnroll(sStudentId in varchar2,
       insert into enroll(e_id, s_id, c_id, c_id_no, e_year, e_semester)
       values (new_e_id, sStudentId, sCourseId, nCourseIdNo, nYear, nSemester);
 
-      update student
-      set s_point = nStudentPointRemained - sPoint
-      where s_id = sStudentId;
-
       insert into point_history(p_id, s_id, e_id, p_amount, p_type)
       values (new_p_id, sStudentId, new_e_id, sPoint, 'enroll');
 
