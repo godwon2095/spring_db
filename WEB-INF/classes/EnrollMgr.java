@@ -26,26 +26,14 @@ public class EnrollMgr {
 		}
 	}
 
-	public Vector getEnrollList(String s_id) {
+	public Vector getEnrollList(String s_id, int nYear, int nSemester) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		CallableStatement cstmt1 = null;
-		CallableStatement cstmt2 = null;
 		ResultSet rs = null;
 		Vector vecList = new Vector();
 
 		try {
 			conn = pool.getConnection();
-
-			cstmt1 = conn.prepareCall("{? = call Date2EnrollYear(SYSDATE)}");
-			cstmt1.registerOutParameter(1, java.sql.Types.INTEGER);
-			cstmt1.execute();
-			int nYear = cstmt1.getInt(1);
-
-			cstmt2 = conn.prepareCall("{? = call Date2EnrollSemester(SYSDATE)}");
-			cstmt2.registerOutParameter(1, java.sql.Types.INTEGER);
-			cstmt2.execute();
-			int nSemester = cstmt2.getInt(1);
 
 			String mySQL = "select e.e_id eid, c.c_id cid, c.c_id_no cid_no, c.c_name cname, c.c_unit cunit, p.p_amount pamount, e.e_success esuccess from course c, enroll e, point_history p where p.e_id = e.e_id and e.c_id = c.c_id and e.c_id_no = c.c_id_no and e.s_id=?and e.e_year=? and e.e_semester=? and p.e_id is not null";
 			pstmt = conn.prepareStatement(mySQL);
@@ -65,8 +53,6 @@ public class EnrollMgr {
 				en.setESuccess(rs.getBoolean("esuccess"));
 				vecList.add(en);
 			}
-			cstmt1.close();
-			cstmt2.close();
 			pstmt.close();
 			conn.close();
 

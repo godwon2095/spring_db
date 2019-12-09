@@ -10,7 +10,7 @@
 
 		<% if (session_id==null) response.sendRedirect("login.jsp"); %>
 		<div class="container">
-			<table class="table table-striped">
+			<table class="table table-striped" style="margin-bottom: 30px;">
 				<thead>
 					<tr>
 						<th>과목번호</th>
@@ -35,7 +35,7 @@
 						semester = Integer.parseInt(request.getParameter("semester"));
 					}
 
-					vlist = enrollMgr.getEnrollList(session_id);
+					vlist = enrollMgr.getEnrollList(session_id, year, semester);
 					int counter = vlist.size();
 					int totUnit = 0;
 					int successUnit = 0;
@@ -66,7 +66,7 @@
 				</tbody>
 			</table>
 				<br>
-			<table class="table">
+			<table class="table" style="margin-bottom: 70px;">
 				<tr>
 					<th>총신청과목수</th>
 					<td align="center"><%= counter %></td>

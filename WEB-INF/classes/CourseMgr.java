@@ -35,7 +35,7 @@ public class CourseMgr {
 
   	try {
   	  conn = pool.getConnection();
-			mySQL = "SELECT c_id, c_id_no, c_name, c_unit FROM course WHERE c_id not in (SELECT c_id FROM enroll WHERE s_id=?)";
+			mySQL = "SELECT c_id, c_id_no, c_name, c_unit FROM course WHERE c_id not in (SELECT c_id FROM enroll WHERE s_id=?) order by c_name";
 			pstmt = conn.prepareStatement(mySQL);
 			pstmt.setString(1, s_id);
 			rs = pstmt.executeQuery();

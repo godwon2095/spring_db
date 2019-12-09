@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="java.sql.*"  %>
+<%@ page import="java.util.*, studentBean.*"%>
 <%@ page import="java.util.*, pointBean.*"%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -12,6 +13,9 @@
     <% if (session_id==null) response.sendRedirect("login.jsp"); %>
     <div class="container">
       <h1>포인트 사용내역</h1>
+      <jsp:useBean id="studentInfo" class="studentBean.StudentInfo" />
+      <% int point = studentInfo.getStudentsPoint(session_id); %>
+      <h4>내 포인트 : <%= point %></h4>
       <table class="table table-striped">
         <thead>
           <tr>

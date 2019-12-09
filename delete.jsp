@@ -29,9 +29,12 @@
 				<tbody>
 				<jsp:useBean id="enrollMgr" class="enrollBean.EnrollMgr" />
 					<%
-						Vector vlist = enrollMgr.getEnrollList(session_id);
+						int year = enrollMgr.getCurrentYear();
+						int semester = enrollMgr.getCurrentSemester();
+
+						Vector vlist = enrollMgr.getEnrollList(session_id, year, semester);
 						int counter = vlist.size();
-						for (int i = 0; i < vlist.size(); i++) {
+						for (int i = 0; i < counter; i++) {
 							Enroll en = (Enroll) vlist.elementAt(i);
 					%>
 					<tr>
