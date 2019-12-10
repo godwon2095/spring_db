@@ -10,5 +10,3 @@ create or replace procedure FinishEnroll
     set e_success = '1'
     where e_id = ()
   end;
-
-Enroll.joins(:courses).where(courses: {c_id: })

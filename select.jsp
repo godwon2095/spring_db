@@ -10,6 +10,7 @@
 
 		<% if (session_id==null) response.sendRedirect("login.jsp"); %>
 		<div class="container">
+			<a href="#" style="margin-bottom: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg">내 시간표 조회</a>
 			<table class="table table-striped" style="margin-bottom: 30px;">
 				<thead>
 					<tr>
@@ -40,7 +41,7 @@
 					int totUnit = 0;
 					int successUnit = 0;
 
-					for(int i=0; i<vlist.size(); i++) {
+					for(int i=0; i< counter; i++) {
 						Enroll en = (Enroll)vlist.elementAt(i);
 						Boolean success = en.getESuccess();
 						totUnit += en.getCUnit();
@@ -65,6 +66,111 @@
 					</tr>
 				</tbody>
 			</table>
+
+			<%
+				System.out.println(year);
+				System.out.println(semester);
+				Vector vlist2 = null;
+				vlist2 = enrollMgr.getTimeTableList(session_id, year, semester);
+				int counter2 = vlist2.size();
+				String class1_name = "";
+				String class2_name = "";
+				String class3_name = "";
+				String class4_name = "";
+				String class5_name = "";
+				String class6_name = "";
+				String class7_name = "";
+				String class8_name = "";
+
+				for(int i=0; i< counter2; i++) {
+					EnrolledTime en = (EnrolledTime)vlist2.elementAt(i);
+					int class_time = en.getTTime();
+					switch (class_time) {
+					case 1:
+						class1_name = en.getCName();
+						break;
+					case 2:
+						class2_name = en.getCName();
+						break;
+					case 3:
+						class3_name = en.getCName();
+						break;
+					case 4:
+						class4_name = en.getCName();
+						break;
+					case 5:
+						class5_name = en.getCName();
+						break;
+					case 6:
+						class6_name = en.getCName();
+						break;
+					case 7:
+						class7_name = en.getCName();
+						break;
+					case 8:
+						class8_name = en.getCName();
+						break;
+					}
+				}
+			 %>
+
+			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-lg">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">내 시간표</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+						<div class="modal-body">
+							<table class="table table-striped">
+							  <thead>
+							    <tr>
+							      <th scope="col">#</th>
+							      <th scope="col">수업명</th>
+							    </tr>
+							  </thead>
+							  <tbody>
+							    <tr>
+							      <th scope="row">1교시</th>
+							      <td><%= class1_name %></td>
+							    </tr>
+							    <tr>
+							      <th scope="row">2교시</th>
+							      <td><%= class2_name %></td>
+							    </tr>
+							    <tr>
+							      <th scope="row">3교시</th>
+							      <td><%= class3_name %></td>
+							    </tr>
+							    <tr>
+							      <th scope="row">4교시</th>
+							      <td><%= class4_name %></td>
+							    </tr>
+									<tr>
+							      <th scope="row">5교시</th>
+							      <td><%= class5_name %></td>
+							    </tr>
+									<tr>
+							      <th scope="row">6교시</th>
+							      <td><%= class6_name %></td>
+							    </tr>
+									<tr>
+							      <th scope="row">7교시</th>
+							      <td><%= class7_name %></td>
+							    </tr>
+									<tr>
+							      <th scope="row">8교시</th>
+							      <td><%= class8_name %></td>
+							    </tr>
+							  </tbody>
+							</table>
+						</div>
+			    </div>
+			  </div>
+			</div>
+
 				<br>
 			<table class="table" style="margin-bottom: 70px;">
 				<tr>

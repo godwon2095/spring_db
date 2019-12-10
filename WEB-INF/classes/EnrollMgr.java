@@ -63,6 +63,38 @@ public class EnrollMgr {
 		return vecList;
 	}
 
+	public Vector getTimeTableList(String s_id,int nYear,int nSemester) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Vector vecList = new Vector();
+
+		try {
+			conn = pool.getConnection();
+
+			String mySQL = "select c_name, t_time from time_table_view where s_id = ? and year = ? and semester = ?";
+			pstmt = conn.prepareStatement(mySQL);
+			pstmt.setString(1, s_id);
+			pstmt.setInt(2, nYear);
+			pstmt.setInt(3, nSemester);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				EnrolledTime en = new EnrolledTime();
+				en.setCName(rs.getString("c_name"));
+				en.setTTime(rs.getInt("t_time"));
+				vecList.add(en);
+			}
+			pstmt.close();
+			conn.close();
+
+		} catch (Exception ex) {
+			System.out.println("Exception" + ex);
+		}
+
+		return vecList;
+	}
+
 	public int getCurrentYear() {
 		int nYear = 0;
 		Connection conn = null;
