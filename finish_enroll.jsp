@@ -9,12 +9,12 @@
 		String admin_session_id = (String)session.getAttribute("admin_user");
     if (admin_session_id != null) {
 	%>
-	<jsp:useBean id="adminUserMgr" class="adminUserBean.AdminUserMgr" />
-	<% result = enrollMgr.finishEnroll(); %>
-	<script>
-		alert("<%= result %>");
-		location.href = "insert.jsp";
-	</script>
-  <%  %>
+		<jsp:useBean id="adminUserMgr" class="adminUserBean.AdminUserMgr" />
+		<% String result = adminUserMgr.finishEnroll(); %> 
+		<script>
+			alert("<%= result %>");
+			location.href = "insert.jsp";
+		</script>
+	<% } %>
 </body>
 </html>

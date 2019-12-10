@@ -63,6 +63,8 @@ public class AdminUserMgr {
 		try {
 			conn = pool.getConnection();
 
+			System.out.println("hello");
+
 			cstmt = conn.prepareCall("{call FinishEnroll()}");
 			cstmt.execute();
 			result = "수강신청을 마감했습니다.";
