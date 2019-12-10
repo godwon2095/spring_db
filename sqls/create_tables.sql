@@ -4,10 +4,12 @@ DROP TABLE COURSE CASCADE CONSTRAINTS PURGE;
 DROP TABLE ENROLL CASCADE CONSTRAINTS PURGE;
 DROP TABLE TEACH CASCADE CONSTRAINTS PURGE;
 DROP TABLE POINT_HISTORY CASCADE CONSTRAINTS PURGE;
+DROP TABLE REVIEW CASCADE CONSTRAINTS PURGE;
 DROP TABLE ADMIN_USER;
 DROP SEQUENCE enroll_e_id_seq;
 DROP SEQUENCE point_history_p_id_seq;
 DROP SEQUENCE admin_user_a_id_seq;
+drop view final_enroll_view;
 
 
 CREATE TABLE student
@@ -195,6 +197,23 @@ CREATE TABLE point_history
 );
 
 CREATE SEQUENCE point_history_p_id_seq
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1;
+
+CREATE TABLE review
+(
+    r_id      NUMBER,
+    s_id      varchar2(10) not null,
+    c_id	    VARCHAR2(10) not null,
+    c_id_no   NUMBER(1) not null,
+    r_content varchar2(500) not null,
+    constraint review_pk primary key (r_id),
+    constraint review_student_fk foreign key (s_id) references student (s_id) on delete cascade,
+    constraint review_course_fk foreign key (c_id, c_id_no) references course (c_id, c_id_no) on delete cascade
+);
+
+CREATE SEQUENCE review_r_id_seq
 START WITH 1
 INCREMENT BY 1
 MINVALUE 1;

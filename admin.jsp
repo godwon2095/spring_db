@@ -14,7 +14,8 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a href="#" class="btn btn-outline-success" data-confirm="정말 수강신청을 마감하시겠습니까?">마감하기</a>
+      <a href="finish_enroll.jsp" class="btn btn-outline-success" data-confirm="정말 수강신청을 마감하시겠습니까?">마감하기</a>
+      <a href="logout.jsp" class="btn btn-outline-danger" data-confirm="정말 로그아웃 하시겠습니까?" style="margin-left: 15px;">로그아웃</a>
     </nav>
 
     <%@ include file="js.html" %>
